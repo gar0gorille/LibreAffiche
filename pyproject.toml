@@ -1,0 +1,7 @@
+dependencies = [
+    "openai",
+    "pydantic",
+    "pyyaml",
+    "playwright",
+    "google-api-python-client",
+]
