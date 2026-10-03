@@ -7,8 +7,8 @@ from pydantic import BaseModel
 EventType = Literal[
     "POSTER_ADDED",
     "VISIBLE",
-    "COVERED",
     "PARTIALLY_COVERED",
+    "COVERED",
     "EMPTY",
     "POSTER_REMOVED",
 ]
