@@ -7,6 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.api.panel import router as panel_router
 from app.api.panel_event import router as panel_event_router
+from app.api.commune import router as commune_router
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -21,6 +22,7 @@ app = FastAPI(
 # API
 app.include_router(panel_router)
 app.include_router(panel_event_router)
+app.include_router(commune_router)
 
 
 # Static files
