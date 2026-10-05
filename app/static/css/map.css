@@ -9,3 +9,307 @@ body {
     width: 100%;
     height: 100%;
 }
+
+/* ==================================================
+   POPUPS MAPLIBRE
+   ================================================== */
+
+
+.add-panel-popup-container .maplibregl-popup-content {
+    width: 420px;
+    max-width: calc(100vw - 32px);
+
+    padding: 0;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+
+.panel-popup-container .maplibregl-popup-content {
+    width: 340px;
+    max-width: calc(100vw - 32px);
+
+    padding: 0;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+
+
+/* ==================================================
+   AJOUT PANNEAU
+   ================================================== */
+
+
+.add-panel-popup {
+    padding: 20px;
+}
+
+
+.add-panel-header h2 {
+    margin: 0;
+
+    font-size: 20px;
+}
+
+
+.add-panel-header p {
+    margin: 5px 0 0;
+
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+.commune-info {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 18px 0;
+
+    padding: 12px;
+
+    background: #f3f6f4;
+
+    border-radius: 8px;
+}
+
+
+.commune-info div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.commune-info small {
+    margin-top: 2px;
+
+    color: #777;
+}
+
+
+#add-panel-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+
+.form-field label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.form-field input {
+    box-sizing: border-box;
+
+    width: 100%;
+
+    padding: 10px 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 7px;
+
+    font-size: 15px;
+}
+
+
+.form-field input:focus {
+    outline: 2px solid #2a9d8f;
+
+    border-color: transparent;
+}
+
+
+.dimensions-row {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 14px;
+}
+
+
+.input-with-unit {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+.input-with-unit input {
+    min-width: 0;
+}
+
+
+.input-with-unit span {
+    color: #666;
+}
+
+
+.surface-preview {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 11px 13px;
+
+    background: #f5f5f5;
+
+    border-radius: 7px;
+}
+
+
+.form-error {
+    color: #b42318;
+
+    font-size: 13px;
+}
+
+
+.primary-button {
+    min-height: 42px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: #2a9d8f;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    font-size: 14px;
+}
+
+
+.primary-button:hover {
+    opacity: 0.9;
+}
+
+
+.primary-button:disabled {
+    cursor: wait;
+
+    opacity: 0.6;
+}
+
+
+
+/* ==================================================
+   FICHE PANNEAU
+   ================================================== */
+
+
+.panel-popup {
+    padding: 18px;
+}
+
+
+.panel-popup-header {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.panel-popup-header h2 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+
+.panel-popup-header p {
+    margin: 4px 0 0;
+
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+.status-badge {
+    align-self: flex-start;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    background:
+        color-mix(in srgb,
+            var(--status-color) 15%,
+            white);
+
+    border:
+        1px solid var(--status-color);
+
+    color:
+        var(--status-color);
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+.panel-details {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 16px;
+}
+
+
+.panel-detail {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    padding: 10px;
+
+    background: #f6f6f6;
+
+    border-radius: 7px;
+}
+
+
+.panel-detail span {
+    color: #777;
+
+    font-size: 11px;
+}
+
+
+.panel-detail strong {
+    font-size: 13px;
+}

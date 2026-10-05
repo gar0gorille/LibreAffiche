@@ -12,6 +12,10 @@ import {
     isAddPanelMode,
 } from "./add-panel.js";
 
+import {
+    PANEL_COLOR_EXPRESSION,
+    PANEL_STATUSES,
+} from "./panel-status.js";
 
 import {
     showPanelPopup
@@ -68,6 +72,165 @@ async function refreshPanels() {
 
 
 // --------------------------------------------------
+// Module : circles colour's legend
+// --------------------------------------------------
+
+function addMapLegend() {
+
+    const legendStatuses = [
+        PANEL_STATUSES.VISIBLE,
+        PANEL_STATUSES.PARTIALLY_COVERED,
+        PANEL_STATUSES.COVERED,
+        PANEL_STATUSES.EMPTY,
+        PANEL_STATUSES.POSTER_REMOVED,
+    ];
+
+
+    const legendControl = {
+
+        onAdd() {
+
+            const container =
+                document.createElement("div");
+
+            container.className =
+                "maplibregl-ctrl";
+
+
+            container.style.cssText = `
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+            `;
+
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+
+            button.textContent = "Légende";
+
+            button.style.cssText = `
+                background: white;
+                border: none;
+                border-radius: 8px;
+                padding: 8px 12px;
+
+                cursor: pointer;
+
+                box-shadow:
+                    0 1px 5px rgba(0, 0, 0, 0.25);
+
+                font-size: 12px;
+                font-weight: 600;
+            `;
+
+
+            const panel =
+                document.createElement("div");
+
+            panel.style.cssText = `
+                display: none;
+
+                margin-top: 6px;
+
+                width: 175px;
+
+                padding: 10px;
+
+                background: white;
+
+                border-radius: 8px;
+
+                box-shadow:
+                    0 1px 5px rgba(0, 0, 0, 0.25);
+            `;
+
+
+            panel.innerHTML = `
+                ${legendStatuses
+                    .map(status => `
+                        <div style="
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            margin: 6px 0;
+                        ">
+
+                            <span style="
+                                display: inline-block;
+
+                                width: 10px;
+                                height: 10px;
+
+                                min-width: 10px;
+
+                                border-radius: 50%;
+
+                                background-color:
+                                    ${status.color};
+                            ">
+                            </span>
+
+                            <span>
+                                ${status.label}
+                            </span>
+
+                        </div>
+                    `)
+                    .join("")
+                }
+            `;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const isOpen =
+                        panel.style.display !== "none";
+
+
+                    panel.style.display =
+                        isOpen
+                            ? "none"
+                            : "block";
+
+
+                    button.textContent =
+                        isOpen
+                            ? "Légende"
+                            : "Fermer";
+                }
+            );
+
+
+            container.appendChild(button);
+            container.appendChild(panel);
+
+
+            this.container = container;
+
+            return container;
+        },
+
+
+        onRemove() {
+
+            this.container.remove();
+
+            this.container = null;
+        }
+    };
+
+
+    map.addControl(
+        legendControl,
+        "top-left"
+    );
+}
+
+// --------------------------------------------------
 // Initialisation carte
 // --------------------------------------------------
 
@@ -84,30 +247,15 @@ map.on("load", async () => {
 
 
     map.addLayer({
-
         id: "panels-points",
-
         type: "circle",
-
         source: "panels",
 
         paint: {
-
             "circle-radius": 7,
 
-            "circle-color": [
-                "match",
-                ["get", "status"],
-
-                "POSTER_ADDED", "#2a9d8f",
-                "VISIBLE", "#2a9d8f",
-                "PARTIALLY_COVERED", "#f4a261",
-                "COVERED", "#e63946",
-                "EMPTY", "#6c757d",
-                "POSTER_REMOVED", "#151718",
-
-                "#457b9d"
-            ],
+            "circle-color":
+                PANEL_COLOR_EXPRESSION,
 
             "circle-stroke-width": 2,
 
@@ -117,9 +265,12 @@ map.on("load", async () => {
     });
 
 
-    // -----------------------------
-    // Interaction panneaux
-    // -----------------------------
+    addMapLegend();
+
+
+    // --------------------------------
+    // Interactions panneaux
+    // --------------------------------
 
     map.on(
         "click",
@@ -162,8 +313,7 @@ map.on("load", async () => {
             if (!isAddPanelMode()) {
 
                 map.getCanvas()
-                    .style.cursor =
-                    "";
+                    .style.cursor = "";
             }
         }
     );
@@ -205,3 +355,4 @@ setupAddPanel(
     maplibregl,
     refreshPanels
 );
+
