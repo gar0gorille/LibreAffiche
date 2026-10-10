@@ -1,0 +1,92 @@
+
+> test
+> node --test tests/*.test.js
+
+TAP version 13
+# [api] Échec HTTP {
+#   url: '/communes/?lon=3&lat=50',
+#   status: 404,
+#   detail: 'Commune not found'
+# }
+# [api] Échec HTTP {
+#   url: '/communes/?lon=3&lat=50',
+#   status: 503,
+#   detail: 'Database unavailable'
+# }
+# [api] Échec HTTP { url: '/panels/', status: 409, detail: 'Panel already exists nearby' }
+# [api] Échec HTTP { url: '/panels/', status: 422, detail: [ { msg: 'Invalid input' } ] }
+# Subtest: Six états d'affiche synchronisés avec le schéma Pydantic
+ok 1 - Six états d'affiche synchronisés avec le schéma Pydantic
+  ---
+  duration_ms: 2.156062
+  type: 'test'
+  ...
+# Subtest: COVERED rouge, sans signalement bleu (AVAILABLE ne signifie pas VISIBLE)
+ok 2 - COVERED rouge, sans signalement bleu (AVAILABLE ne signifie pas VISIBLE)
+  ---
+  duration_ms: 0.244827
+  type: 'test'
+  ...
+# Subtest: Expression MapLibre : feature-state puis dernier event puis statut brut
+ok 3 - Expression MapLibre : feature-state puis dernier event puis statut brut
+  ---
+  duration_ms: 0.25812
+  type: 'test'
+  ...
+# Subtest: GET historique utilise /panels/:id/events/, pas /panel-events/
+ok 4 - GET historique utilise /panels/:id/events/, pas /panel-events/
+  ---
+  duration_ms: 0.46593
+  type: 'test'
+  ...
+# Subtest: POST événement transmet la structure attendue par PanelEventCreate
+ok 5 - POST événement transmet la structure attendue par PanelEventCreate
+  ---
+  duration_ms: 0.665351
+  type: 'test'
+  ...
+# Subtest: Exports événement api.js et panel-events.js désignent les mêmes fonctions
+ok 6 - Exports événement api.js et panel-events.js désignent les mêmes fonctions
+  ---
+  duration_ms: 0.373465
+  type: 'test'
+  ...
+# Subtest: GET emprise de carte transmet la bbox attendue
+ok 7 - GET emprise de carte transmet la bbox attendue
+  ---
+  duration_ms: 0.532096
+  type: 'test'
+  ...
+# Subtest: Commune 404 retourne null, sans masquer les autres erreurs
+ok 8 - Commune 404 retourne null, sans masquer les autres erreurs
+  ---
+  duration_ms: 2.736619
+  type: 'test'
+  ...
+# Subtest: Création panneau 409 remonte une ApiError identifiable
+ok 9 - Création panneau 409 remonte une ApiError identifiable
+  ---
+  duration_ms: 0.836397
+  type: 'test'
+  ...
+# Subtest: Erreur FastAPI de validation 422 contient un message compréhensible
+ok 10 - Erreur FastAPI de validation 422 contient un message compréhensible
+  ---
+  duration_ms: 0.656482
+  type: 'test'
+  ...
+# Subtest: Fichiers map.js et CSS gardent les contrats MapLibre
+ok 11 - Fichiers map.js et CSS gardent les contrats MapLibre
+  ---
+  duration_ms: 0.959968
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 114.772932

@@ -1,90 +1,75 @@
-export async function fetchCommune(
-    longitude,
-    latitude
-) {
+/** Fonctions réseau pour les communes et les panneaux (API FastAPI). */
 
-    const params = new URLSearchParams({
-        lon: longitude,
-        lat: latitude,
-    });
-
-    const response = await fetch(
-        `/communes/?${params}`
-    );
-
-    console.log(
-        "Commune request:",
-        `/communes/?${params}`
-    );
-
-    if (!response.ok) {
-
-        const error = await response.json();
-
-        console.error(
-            "Erreur commune:",
-            response.status,
-            error
-        );
-
-        return null;
+export class ApiError extends Error {
+    constructor(status, detail, url) {
+        super(detail || `Erreur HTTP ${status}`);
+        this.name = "ApiError";
+        this.status = status;
+        this.url = url;
     }
-
-    return await response.json();
 }
 
+/**
+ * Retourne le JSON d'une réponse HTTP ou une ApiError exploitable en UI.
+ * FastAPI renvoie souvent { detail: string | Array<ValidationError> }.
+ */
+export async function requestJson(url, options = {}) {
+    const response = await fetch(url, options);
+    let data = null;
 
-export async function fetchPanels(
-    minLon,
-    minLat,
-    maxLon,
-    maxLat
-) {
+    try {
+        data = await response.json();
+    } catch {
+        // Réponses d'erreur HTML ou corps vide : on garde le code HTTP.
+    }
 
+    if (!response.ok) {
+        const detail = data?.detail;
+        const message = typeof detail === "string"
+            ? detail
+            : Array.isArray(detail)
+                ? detail.map(item => item.msg ?? "Champ invalide").join(" ; ")
+                : `Erreur HTTP ${response.status}`;
+        console.error("[api] Échec HTTP", { url, status: response.status, detail });
+        throw new ApiError(response.status, message, url);
+    }
+
+    return data;
+}
+
+export async function fetchCommune(longitude, latitude) {
+    // Convention GeoJSON/PostGIS : longitude d'abord, latitude ensuite.
+    const params = new URLSearchParams({ lon: longitude, lat: latitude });
+    const url = `/communes/?${params}`;
+
+    try {
+        return await requestJson(url);
+    } catch (error) {
+        // 404 est normal hors d'une commune connue ; autres erreurs remontées.
+        if (error instanceof ApiError && error.status === 404) return null;
+        throw error;
+    }
+}
+
+export function fetchPanels(minLon, minLat, maxLon, maxLat) {
     const params = new URLSearchParams({
         min_lon: minLon,
         min_lat: minLat,
         max_lon: maxLon,
         max_lat: maxLat,
     });
-
-    const response = await fetch(
-        `/panels/?${params}`
-    );
-
-    if (!response.ok) {
-
-        throw new Error(
-            `Failed to load panels: ${response.status}`
-        );
-    }
-
-    return await response.json();
+    return requestJson(`/panels/?${params}`);
 }
 
-
-export async function createPanel(panel) {
-
-    const response = await fetch(
-        "/panels/",
-        {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json",
-            },
-
-            body: JSON.stringify(panel),
-        }
-    );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            `Impossible d'ajouter le panneau : ${response.status}`
-        );
-    }
-
-    return await response.json();
+export function createPanel(panel) {
+    // PanelCreate exige longitude, latitude ; adresse et surface facultatives.
+    return requestJson("/panels/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(panel),
+    });
 }
+
+// Compatibilité avec les anciens imports venant de './api.js'.
+// Une seule implémentation des événements vit désormais dans panel-events.js.
+export { fetchPanelEvents, createPanelEvent } from "./panel-events.js";
